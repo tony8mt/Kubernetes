@@ -1,5 +1,5 @@
 FROM centos
-MAINTAINER “Tony Thomas” <tonyt@gmail.com>
+MAINTAINER “Tony Thomas”
 ENV container docker
 RUN yum -y update; yum clean all
 RUN yum -y install java; yum clean all
