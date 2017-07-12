@@ -1,16 +1,16 @@
-FROM centos
-MAINTAINER “Tony Thomas”
-ENV container docker
-RUN yum -y update; yum clean all
-RUN yum -y install java; yum clean all
-RUN yum -y install unzip; yum clean all
-RUN yum -y install wget; yum clean all
-RUN cd /etc; wget http://apache.mirror.serversaustralia.com.au/tomcat/tomcat-8/v8.5.15/bin/apache-tomcat-8.5.15.zip;\
-unzip /etc/apache-tomcat-8.5.15.zip;\
-mv /etc/apache-tomcat-8.5.15 /etc/tomcat;\
-mv /etc/tomcat/conf/server.xml /etc/tomcat/conf/server.xml.bkp;\
-(sed 's/port\=\"8080\"/port\=\"5000\"/g' /etc/tomcat/conf/server.xml.bkp > /etc/tomcat/conf/server.xml);\
-chmod 755 /etc/tomcat/bin/*.sh;
-CMD [ "sh", "-c", "/etc/tomcat/bin/startup.sh" ] 
+FROM centos:6
+
+RUN yum update -y
+RUN yum install java -y
+RUN yum install wget -y
+RUN yum install unzip -y
+RUN cd /etc
+RUN wget http://apache.melbourneitmirror.net/tomcat/tomcat-7/v7.0.79/bin/apache-tomcat-7.0.79.zip
+RUN unzip -q apache-tomcat-7.0.79.zip
+RUN rm -f *.zip
+RUN mv apache-* apache
+RUN sed -i s/port\=\"8080\"/port\=\"5000\"/g apache/conf/server.xml
+RUN chmod 755 apache/bin/*.sh
+RUN ls -l apache/bin/*.sh
+CMD ["apache/bin/catalina.sh", "run"]
 EXPOSE 5000
-CMD [“/usr/sbin/init”]
